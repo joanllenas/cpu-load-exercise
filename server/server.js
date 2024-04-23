@@ -1,7 +1,10 @@
 import express from 'express';
 import os from 'os';
+import cors from 'cors';
 
 const app = express();
+app.use(cors());
+
 const PORT = 3001;
 
 app.get('/api/load-average', (req, res) => {
