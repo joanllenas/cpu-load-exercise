@@ -1,19 +1,23 @@
-import { useState } from 'react';
+import React from 'react';
+import { useLoadAverage } from './data/load-average.store';
 
 function App() {
-  const [count, setCount] = useState(0);
+  const loadAverage = useLoadAverage();
+
+  if (loadAverage.error !== null) {
+    return <div>Error: {loadAverage.error}</div>;
+  }
+
+  if (loadAverage.data.length === 0) {
+    return <div>Loading...</div>;
+  }
+
+  const currentLoad = loadAverage.data[loadAverage.data.length - 1].value;
+  console.log('App rerender');
 
   return (
     <div>
-      <h1 className="text-3xl font-bold">Vite + React</h1>
-      <div>
-        <button
-          className="p-2 border bg-slate-100"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          count is {count}
-        </button>
-      </div>
+      <h1 className="text-3xl font-bold">Current load avg: {currentLoad}</h1>
     </div>
   );
 }
