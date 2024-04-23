@@ -1,5 +1,7 @@
 # CPU load
 
+## Running the project
+
 Install the dependencies and start the development servers by running:
 
 ```
@@ -7,6 +9,10 @@ npm install && npm run start
 ```
 
 Access the project at: [http://localhost:5173/](http://localhost:5173/)
+
+## Production design
+
+The explanation of how I would extend or improve the application design if I were building this for production [can be found here](./PRODUCTION.md).
 
 ---
 
