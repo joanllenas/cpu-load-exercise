@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLoadAverage } from './data/load-average.store';
+import { useLoadAverage } from '@data/load-average.store';
 
 function App() {
   const loadAverage = useLoadAverage();
