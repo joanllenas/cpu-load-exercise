@@ -13,7 +13,6 @@ function App() {
   }
 
   const currentLoad = loadAverage.data[loadAverage.data.length - 1].value;
-  console.log('App rerender');
 
   return (
     <div>

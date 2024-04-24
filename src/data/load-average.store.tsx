@@ -21,19 +21,15 @@ let intervalRef: ReturnType<typeof setInterval>;
 export default function LoadAverageProvider({
   children,
 }: React.PropsWithChildren) {
-  console.log('LoadAverageProvider');
   const [loadAverage, setLoadAverage] =
     React.useState<LoadAverageData>(initialValue);
 
   React.useEffect(() => {
-    console.log('First effect call');
     loadAverageInterval(loadAverage, setLoadAverage);
     intervalRef = setInterval(async () => {
-      console.log('effect interval');
       loadAverageInterval(loadAverage, setLoadAverage);
     }, config.cpuRefreshInterval);
     return () => {
-      console.log('effect destroy');
       clearInterval(intervalRef);
     };
   }, []);
