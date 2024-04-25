@@ -11,8 +11,8 @@ const toClipPath = (n: number) => {
 
 export default function CurrentLoadWidget({ cpuLoad }: Props) {
   return (
-    <div className="relative flex items-center justify-center shadow-xl w-52 h-52 font-numbers rounded-2xl overflow-clip bg-gradient-to-tr from-slate-600 to-slate-800">
-      <span className="z-10 text-6xl font-bold opacity-50 text-slate-100 numbers">
+    <div className="relative flex items-center justify-center shadow-xl shadow-slate-800 w-52 h-52 font-numbers rounded-2xl overflow-clip bg-gradient-to-tr from-slate-600 to-slate-800">
+      <span className="z-10 font-bold opacity-50 text-7xl text-slate-100 numbers">
         {toPercentage(cpuLoad)}
       </span>
       <div
