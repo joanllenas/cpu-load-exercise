@@ -20,8 +20,7 @@ export default function Alert({
       className={classNames(
         'px-9 py-6 shadow-xl shadow-slate-800 rounded-2xl',
         variantClasses,
-      )}
-    >
+      )}>
       {children}
     </div>
   );
