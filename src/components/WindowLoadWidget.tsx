@@ -1,12 +1,12 @@
-import { LoadAverage } from '../data/LoadAverageContext';
+import { SlidingTimeWindow } from '../lib/sliding-time-window';
 
 interface Props {
-  loadOverTime: LoadAverage[];
+  loadOverTime: SlidingTimeWindow<number>;
 }
 
 const toPercentage = (n: number) => Math.round(100 * n).toString() + '%';
 
-const toClipPath = (points: LoadAverage[]) => {
+const toClipPath = (points: Props['loadOverTime']) => {
   if (points.length === 0) {
     return '';
   }

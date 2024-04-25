@@ -1,18 +1,17 @@
 import React from 'react';
 import { getLoadAverage } from './load-average.service';
 import { config } from '../config';
-
-export interface LoadAverage {
-  timestamp: number;
-  value: number;
-}
+import { SlidingTimeWindow } from '../lib/sliding-time-window';
 
 interface LoadAverageData {
   error: string | null;
-  data: LoadAverage[];
+  data: SlidingTimeWindow<number>;
 }
 
-const initialValue = { error: null, data: [] };
+const initialValue = {
+  error: null,
+  data: new SlidingTimeWindow<number>(config.cpuLoadTimeWindowInMinutes),
+};
 
 const LoadAverageContext = React.createContext<LoadAverageData>(initialValue);
 
@@ -49,10 +48,7 @@ async function loadAverageInterval(
 
     setLoadAverage((prevState) => ({
       error: null,
-      data: [
-        ...prevState.data,
-        { timestamp: new Date().getTime(), value: result },
-      ],
+      data: prevState.data.add(new Date().getTime(), result),
     }));
   } catch (error: any) {
     clearInterval(intervalRef);
