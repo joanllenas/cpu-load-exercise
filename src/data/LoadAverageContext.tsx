@@ -1,6 +1,6 @@
 import React from 'react';
 import { getLoadAverage } from './load-average.service';
-import { config } from '@/config';
+import { config } from '../config';
 
 interface LoadAverage {
   timestamp: number;
@@ -28,7 +28,7 @@ export default function LoadAverageProvider({
     loadAverageInterval(loadAverage, setLoadAverage);
     intervalRef = setInterval(async () => {
       loadAverageInterval(loadAverage, setLoadAverage);
-    }, config.cpuRefreshInterval);
+    }, config.cpuLoadRefreshInterval);
     return () => {
       clearInterval(intervalRef);
     };

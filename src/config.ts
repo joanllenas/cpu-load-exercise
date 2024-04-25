@@ -1,4 +1,4 @@
 export const config = {
   apiUrl: 'http://localhost:3001/api',
-  cpuRefreshInterval: 10000,
+  cpuLoadRefreshInterval: 10_000,
 };

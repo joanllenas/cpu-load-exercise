@@ -1,5 +1,5 @@
-import React from 'react';
-import { useLoadAverage } from '@data/load-average.store';
+import { useLoadAverage } from './data/LoadAverageContext';
+import CurrentLoadWidget from './components/CurrentLoadWidget';
 
 function App() {
   const loadAverage = useLoadAverage();
@@ -15,8 +15,9 @@ function App() {
   const currentLoad = loadAverage.data[loadAverage.data.length - 1].value;
 
   return (
-    <div>
+    <div className="flex-col items-center justify-center h-screen">
       <h1 className="text-3xl font-bold">Current load avg: {currentLoad}</h1>
+      <CurrentLoadWidget cpuLoad={currentLoad} />
     </div>
   );
 }
