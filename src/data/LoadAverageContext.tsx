@@ -2,7 +2,7 @@ import React from 'react';
 import { getLoadAverage } from './load-average.service';
 import { config } from '../config';
 
-interface LoadAverage {
+export interface LoadAverage {
   timestamp: number;
   value: number;
 }
@@ -25,9 +25,9 @@ export default function LoadAverageProvider({
     React.useState<LoadAverageData>(initialValue);
 
   React.useEffect(() => {
-    loadAverageInterval(loadAverage, setLoadAverage);
+    loadAverageInterval(setLoadAverage);
     intervalRef = setInterval(async () => {
-      loadAverageInterval(loadAverage, setLoadAverage);
+      loadAverageInterval(setLoadAverage);
     }, config.cpuLoadRefreshInterval);
     return () => {
       clearInterval(intervalRef);
@@ -41,29 +41,28 @@ export default function LoadAverageProvider({
   );
 }
 
-export function useLoadAverage() {
-  return React.useContext(LoadAverageContext);
-}
-
 async function loadAverageInterval(
-  loadAverage: LoadAverageData,
   setLoadAverage: React.Dispatch<React.SetStateAction<LoadAverageData>>,
 ) {
   try {
     const { result } = await getLoadAverage();
 
-    setLoadAverage({
+    setLoadAverage((prevState) => ({
       error: null,
       data: [
-        ...loadAverage.data,
+        ...prevState.data,
         { timestamp: new Date().getTime(), value: result },
       ],
-    });
+    }));
   } catch (error: any) {
     clearInterval(intervalRef);
-    setLoadAverage({
-      ...loadAverage,
+    setLoadAverage((prevState) => ({
+      ...prevState,
       error: `There has been an error while retriving your CPU load average data: "${error.toString()}"`,
-    });
+    }));
   }
+}
+
+export function useLoadAverage() {
+  return React.useContext(LoadAverageContext);
 }

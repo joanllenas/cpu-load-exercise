@@ -1,23 +1,36 @@
 import { useLoadAverage } from './data/LoadAverageContext';
 import CurrentLoadWidget from './components/CurrentLoadWidget';
+import WindowLoadWidget from './components/WindowLoadWidget';
+import AppContainer from './ui/AppContainer';
+import Alert from './ui/Alert';
 
 function App() {
-  const loadAverage = useLoadAverage();
+  const loadAverageData = useLoadAverage();
 
-  if (loadAverage.error !== null) {
-    return <div>Error: {loadAverage.error}</div>;
+  if (loadAverageData.error !== null) {
+    return (
+      <AppContainer>
+        <Alert variant="error">Error: {loadAverageData.error}</Alert>
+      </AppContainer>
+    );
   }
 
-  if (loadAverage.data.length === 0) {
-    return <div>Loading...</div>;
+  if (loadAverageData.data.length === 0) {
+    return (
+      <AppContainer>
+        <Alert>Loading...</Alert>
+      </AppContainer>
+    );
   }
 
-  const currentLoad = loadAverage.data[loadAverage.data.length - 1].value;
+  const currentLoad =
+    loadAverageData.data[loadAverageData.data.length - 1].value;
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
-      <CurrentLoadWidget cpuLoad={currentLoad} />
-    </div>
+    <AppContainer>
+      <CurrentLoadWidget currentLoad={currentLoad} />
+      <WindowLoadWidget loadOverTime={loadAverageData.data} />
+    </AppContainer>
   );
 }
 
