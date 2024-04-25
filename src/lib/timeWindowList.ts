@@ -18,7 +18,12 @@ export class TimeWindowList<T> {
 
   add(timestamp: number, value: T): TimeWindowList<T> {
     this.window.push({ timestamp, value });
-    this.cleanup(timestamp);
+    while (
+      this.window.length > 0 &&
+      timestamp - this.window[0].timestamp > this.maxInterval
+    ) {
+      this.window.shift();
+    }
     return this;
   }
 
@@ -28,14 +33,5 @@ export class TimeWindowList<T> {
 
   map<B>(fn: (item: TimeData<T>, index: number) => B): B[] {
     return this.window.map(fn);
-  }
-
-  private cleanup(currentTimestamp: number) {
-    while (
-      this.window.length > 0 &&
-      currentTimestamp - this.window[0].timestamp > this.maxInterval
-    ) {
-      this.window.shift();
-    }
   }
 }
