@@ -1,7 +1,7 @@
-import { SlidingTimeWindow } from '../lib/sliding-time-window';
+import { TimeWindowList } from '../lib/time-window-list';
 
 interface Props {
-  loadOverTime: SlidingTimeWindow<number>;
+  loadOverTime: TimeWindowList<number>;
 }
 
 const toPercentage = (n: number) => Math.round(100 * n).toString() + '%';

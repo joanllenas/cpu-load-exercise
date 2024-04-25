@@ -3,7 +3,7 @@ export interface TimeData<T> {
   value: T;
 }
 
-export class SlidingTimeWindow<T> {
+export class TimeWindowList<T> {
   private window: TimeData<T>[];
   private readonly maxInterval: number;
 
@@ -16,7 +16,7 @@ export class SlidingTimeWindow<T> {
     return this.window.length;
   }
 
-  add(timestamp: number, value: T): SlidingTimeWindow<T> {
+  add(timestamp: number, value: T): TimeWindowList<T> {
     this.window.push({ timestamp, value });
     this.cleanup(timestamp);
     return this;

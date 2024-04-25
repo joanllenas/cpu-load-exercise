@@ -1,16 +1,16 @@
 import React from 'react';
 import { getLoadAverage } from './load-average.service';
 import { config } from '../config';
-import { SlidingTimeWindow } from '../lib/sliding-time-window';
+import { TimeWindowList } from '../lib/time-window-list';
 
 interface LoadAverageData {
   error: string | null;
-  data: SlidingTimeWindow<number>;
+  data: TimeWindowList<number>;
 }
 
 const initialValue = {
   error: null,
-  data: new SlidingTimeWindow<number>(config.cpuLoadTimeWindowInMinutes),
+  data: new TimeWindowList<number>(config.cpuLoadTimeWindowInMinutes),
 };
 
 const LoadAverageContext = React.createContext<LoadAverageData>(initialValue);

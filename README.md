@@ -22,8 +22,9 @@ Showcase your front-end skills by creating a proof-of-concept (POC) for a browse
 
 A user should be able to view your application to answer the following questions about their computer:
 
-- What is my computer's current average CPU load?
-- How did the average CPU load change over a 10 minute window?
+√ What is my computer's current average CPU load?
+√ How did the average CPU load change over a 10 minute window?
+
 - Has my computer been under heavy CPU load for 2 minutes or more? When? How many times?
 - Has my computer recovered from heavy CPU load? When? How many times?
 
