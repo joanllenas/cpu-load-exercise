@@ -15,8 +15,7 @@ function App() {
   const currentLoad = loadAverage.data[loadAverage.data.length - 1].value;
 
   return (
-    <div className="flex-col items-center justify-center h-screen">
-      <h1 className="text-3xl font-bold">Current load avg: {currentLoad}</h1>
+    <div className="flex flex-col items-center justify-center h-screen">
       <CurrentLoadWidget cpuLoad={currentLoad} />
     </div>
   );
