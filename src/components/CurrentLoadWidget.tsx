@@ -16,7 +16,7 @@ export default function CurrentLoadWidget({ currentLoad }: Props) {
         {toPercentage(currentLoad)}
       </span>
       <div
-        className="absolute w-full h-full transition-all duration-1000 ease-out rounded-2xl"
+        className="absolute w-full h-full transition-all duration-1000 ease-out"
         style={toBarClipPath(currentLoad)}>
         <div className="absolute bg-gradient-to-t to-80% from-green-700 to-red-900 w-full h-full"></div>
       </div>
