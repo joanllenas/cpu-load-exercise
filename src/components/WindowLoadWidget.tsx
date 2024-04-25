@@ -1,18 +1,17 @@
-import { TimeWindowList } from '../lib/time-window-list';
+import { TimeWindowList } from '../lib/timeWindowList';
+import { toPercentage } from '../lib/utils';
 
 interface Props {
   loadOverTime: TimeWindowList<number>;
 }
 
-const toPercentage = (n: number) => Math.round(100 * n).toString() + '%';
-
 const toAreaClipPath = (points: Props['loadOverTime']) => {
   if (points.length === 0) {
     return '';
   }
-  const proportion = 100 / (points.length - 1);
+  const hProportion = 100 / (points.length - 1);
   let polygonPointPairs = points.map((point, index) => {
-    return `${index * proportion}% ${toPercentage(1 - point.value)}`;
+    return `${index * hProportion}% ${toPercentage(1 - point.value)}`;
   });
   polygonPointPairs = ['0 100%', ...polygonPointPairs, '100% 100%'];
   return `polygon(${polygonPointPairs.join(', ')})`;

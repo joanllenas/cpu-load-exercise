@@ -1,7 +1,7 @@
 import React from 'react';
-import { getLoadAverage } from './load-average.service';
+import { getLoadAverage } from './loadAverageService';
 import { config } from '../config';
-import { TimeWindowList } from '../lib/time-window-list';
+import { TimeWindowList } from '../lib/timeWindowList';
 
 interface LoadAverageData {
   error: string | null;

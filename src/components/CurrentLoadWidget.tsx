@@ -1,8 +1,8 @@
+import { toPercentage } from '../lib/utils';
+
 interface Props {
   currentLoad: number;
 }
-
-const toPercentage = (n: number) => Math.round(100 * n).toString() + '%';
 
 const toBarClipPath = (n: number) => {
   const pct = toPercentage(1 - n);
