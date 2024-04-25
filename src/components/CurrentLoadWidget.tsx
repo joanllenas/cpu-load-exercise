@@ -4,7 +4,7 @@ interface Props {
 
 const toPercentage = (n: number) => Math.round(100 * n).toString() + '%';
 
-const toClipPath = (n: number) => {
+const toBarClipPath = (n: number) => {
   const pct = toPercentage(1 - n);
   return { clipPath: `polygon(0 ${pct}, 100% ${pct}, 100% 100%, 0 100%)` };
 };
@@ -17,7 +17,7 @@ export default function CurrentLoadWidget({ currentLoad }: Props) {
       </span>
       <div
         className="absolute w-full h-full transition-all duration-1000 ease-out rounded-2xl"
-        style={toClipPath(currentLoad)}
+        style={toBarClipPath(currentLoad)}
       >
         <div className="absolute bg-gradient-to-t to-80% from-green-700 to-red-900 w-full h-full"></div>
       </div>
