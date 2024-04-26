@@ -17,3 +17,7 @@ To make the app more robust, I would likely use a JSON Schema validator library 
 ## State management
 
 This application is read-only, but if we were to start adding interactivity, I would begin using a state management library such as Redux or Zustand. This approach models interactions around a centralized store management solution, proven effective in large-scale deployments and beneficial for teams using a common language: actions, stores, reducers, and side-effects.
+
+## Other code improvements
+
+I have left a few `TODO:` comments in the code with things I would have done differently if I were building this for production.

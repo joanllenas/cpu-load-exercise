@@ -1,5 +1,6 @@
+import React from 'react';
 import { TimeData } from '../lib/timeWindowList';
-import { toPercentage } from '../lib/utils';
+import { toPercentage, formatTime, formatPercentage } from '../lib/utils';
 
 interface Props {
   loadOverTime: TimeData[];
@@ -28,23 +29,79 @@ const toLeft = (index: number, len: number) => {
   return toPercentage(index * proportion);
 };
 
+const toWidth = (len: number) => {
+  if (len === 1) {
+    return toPercentage(0);
+  }
+  const proportion = 1 / (len - 1);
+  return toPercentage(proportion);
+};
+
 export default function WindowLoadWidget({ loadOverTime }: Props) {
+  const [hoverData, setHoverData] = React.useState(loadOverTime[0]);
+  const [tooltipVisible, setTooltipVisible] = React.useState(false);
+  const [tooltipPosition, setTooltipPosition] = React.useState({ x: 0, y: 0 });
+  const barWidth = toWidth(loadOverTime.length);
+
+  function updateTooltipPosition(
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+  ) {
+    const surface = event.currentTarget as HTMLDivElement;
+    const coords = {
+      x: event.clientX - surface.offsetLeft,
+      y: event.clientY - surface.offsetTop,
+    };
+
+    // TODO: In PROD I would probably use useRef() and useLayoutEffect() to get the values
+    const tooltipWidth = 120;
+    const tooltipHeight = 20;
+
+    const pointerMargin = 20;
+    coords.x =
+      coords.x > surface.offsetWidth / 2
+        ? coords.x - (tooltipWidth + pointerMargin)
+        : coords.x + pointerMargin;
+    coords.y =
+      coords.y > surface.offsetHeight / 2
+        ? coords.y - (tooltipHeight + pointerMargin)
+        : coords.y + pointerMargin;
+
+    setTooltipPosition(coords);
+  }
+
   return (
-    <div className="relative flex items-center justify-center w-3/4 shadow-xl shadow-slate-800 h-52 rounded-2xl overflow-clip bg-gradient-to-tr from-slate-600 to-slate-800">
+    <div
+      onMouseMove={updateTooltipPosition}
+      onMouseLeave={() => setTooltipVisible(false)}
+      onMouseEnter={() => setTooltipVisible(true)}
+      className="relative flex items-center justify-center w-3/4 shadow-xl shadow-slate-800 h-52 rounded-2xl overflow-clip bg-gradient-to-tr from-slate-600 to-slate-800">
       <div
         className="absolute w-full h-full"
         style={{ clipPath: toAreaClipPath(loadOverTime) }}>
         <div className="absolute bg-gradient-to-t to-80% from-green-700 to-red-900 w-full h-full"></div>
       </div>
 
-      {loadOverTime.map((item, index) => {
-        return (
+      <div className="absolute w-full h-full">
+        {loadOverTime.map((data, index) => {
+          return (
+            <div
+              key={data.timestamp}
+              onMouseEnter={() => setHoverData(data)}
+              className="absolute h-full border-l border-dashed first:border-l-0 border-slate-700 hover:bg-slate-400 hover:bg-opacity-15"
+              style={{
+                left: toLeft(index, loadOverTime.length),
+                width: barWidth,
+              }}></div>
+          );
+        })}
+        {tooltipVisible && (
           <div
-            key={item.timestamp}
-            className="absolute h-full border-l border-dashed border-slate-700"
-            style={{ left: toLeft(index, loadOverTime.length) }}></div>
-        );
-      })}
+            className="absolute px-2 py-1 bg-opacity-50 rounded-lg bg-slate-100"
+            style={{ left: tooltipPosition.x, top: tooltipPosition.y }}>
+            {`${formatTime(hoverData.timestamp)} - ${formatPercentage(hoverData.value)}`}
+          </div>
+        )}
+      </div>
 
       {/* <div
         className="absolute w-full h-px bg-green-500"

@@ -11,8 +11,7 @@ export const moveTimeWindow = (
   let last = list[list.length - 1].timestamp;
   const timeWindow = timeWindowMinutes * 60 * 1000;
   while (list.length > 0 && last - first > timeWindow) {
-    const removed = list.shift();
-    console.log('removed', removed);
+    list.shift();
     first = list[0].timestamp;
   }
   return list;
