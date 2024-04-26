@@ -5,13 +5,11 @@ const tenMinutes = 1000 * 60 * 10;
 
 describe('TimeWindowList', () => {
   test('keeping items within the window keeps them', () => {
-    const instance = new TimeWindowList<number>(10)
-      .add(0, 0)
-      .add(tenMinutes, 1);
+    const instance = new TimeWindowList(10).add(0, 0).add(tenMinutes, 1);
     expect(instance.length).toBe(2);
   });
   test('adding items moves the window and first items fall', () => {
-    const instance = new TimeWindowList<number>(10)
+    const instance = new TimeWindowList(10)
       .add(0, 234324)
       .add(tenMinutes, 233242)
       .add(tenMinutes + 1000, 3453)
@@ -20,7 +18,7 @@ describe('TimeWindowList', () => {
     expect(instance.length).toBe(4);
   });
   test('the first items falls', () => {
-    const instance = new TimeWindowList<number>(10)
+    const instance = new TimeWindowList(10)
       .add(0, 0)
       .add(tenMinutes, 1)
       .add(tenMinutes + 1000, 2);

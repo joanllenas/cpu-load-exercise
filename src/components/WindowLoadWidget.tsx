@@ -2,7 +2,7 @@ import { TimeWindowList } from '../lib/timeWindowList';
 import { toPercentage, formatTime } from '../lib/utils';
 
 interface Props {
-  loadOverTime: TimeWindowList<number>;
+  loadOverTime: TimeWindowList;
 }
 
 const toAreaClipPath = (points: Props['loadOverTime']) => {
@@ -29,7 +29,6 @@ const toBarWidth = (points: Props['loadOverTime']) => {
 };
 
 export default function WindowLoadWidget({ loadOverTime }: Props) {
-  console.log('WindowLoadWidget');
   return (
     <div className="relative flex items-center justify-center w-3/4 shadow-xl shadow-slate-800 h-52 rounded-2xl overflow-clip bg-gradient-to-tr from-slate-600 to-slate-800">
       <div
@@ -51,6 +50,13 @@ export default function WindowLoadWidget({ loadOverTime }: Props) {
           );
         })}
       </div>
+
+      {/* <div
+        className="absolute w-full h-px bg-green-500"
+        style={{ bottom: toPercentage(loadOverTime.valueRange.min) }}></div>
+      <div
+        className="absolute w-full h-px bg-red-500"
+        style={{ bottom: toPercentage(loadOverTime.valueRange.max) }}></div> */}
 
       <div className="absolute w-full h-full pointer-events-none stripes-texture"></div>
     </div>
