@@ -1,4 +1,4 @@
-import { toPercentage } from '../lib/utils';
+import { toPercentage, formatPercentage } from '../lib/utils';
 
 interface Props {
   currentLoad: number;
@@ -13,7 +13,7 @@ export default function CurrentLoadWidget({ currentLoad }: Props) {
   return (
     <div className="relative flex items-center justify-center shadow-xl shadow-slate-800 w-52 h-52 rounded-2xl overflow-clip bg-gradient-to-tr from-slate-600 to-slate-800">
       <span className="z-10 font-bold opacity-50 text-7xl text-slate-100 font-numbers">
-        {toPercentage(currentLoad)}
+        {formatPercentage(currentLoad)}
       </span>
       <div
         className="absolute w-full h-full transition-all duration-1000 ease-out"

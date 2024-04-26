@@ -8,7 +8,7 @@ interface LoadAverageData {
   data: TimeData[];
 }
 
-const initialValue = {
+const initialValue: LoadAverageData = {
   error: null,
   data: [],
 };

@@ -20,18 +20,15 @@ const toAreaClipPath = (points: Props['loadOverTime']) => {
   return `polygon(${polygonPointPairs.join(', ')})`;
 };
 
-const toBarWidth = (points: Props['loadOverTime']) => {
-  if (points.length === 0) {
-    return '';
-  } else if (points.length <= 2) {
-    return toPercentage(1);
+const toLeft = (index: number, len: number) => {
+  if (len === 1) {
+    return toPercentage(0);
   }
-  const proportion = 100 / (points.length - 1);
-  return toPercentage(proportion);
+  const proportion = 1 / (len - 1);
+  return toPercentage(index * proportion);
 };
 
 export default function WindowLoadWidget({ loadOverTime }: Props) {
-  const width = toBarWidth(loadOverTime);
   return (
     <div className="relative flex items-center justify-center w-3/4 shadow-xl shadow-slate-800 h-52 rounded-2xl overflow-clip bg-gradient-to-tr from-slate-600 to-slate-800">
       <div
@@ -40,19 +37,14 @@ export default function WindowLoadWidget({ loadOverTime }: Props) {
         <div className="absolute bg-gradient-to-t to-80% from-green-700 to-red-900 w-full h-full"></div>
       </div>
 
-      <div className="absolute flex w-full h-full">
-        {loadOverTime.map((item) => {
-          return (
-            <div
-              key={item.timestamp}
-              className="h-full border-r border-dashed last:border-none hover:bg-slate-50 opacity-15 border-slate-100"
-              style={{ width }}
-              title={
-                formatTime(item.timestamp) + ' - ' + toPercentage(item.value)
-              }></div>
-          );
-        })}
-      </div>
+      {loadOverTime.map((item, index) => {
+        return (
+          <div
+            key={item.timestamp}
+            className="absolute h-full border-l border-dashed border-slate-700"
+            style={{ left: toLeft(index, loadOverTime.length) }}></div>
+        );
+      })}
 
       {/* <div
         className="absolute w-full h-px bg-green-500"

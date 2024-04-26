@@ -1,4 +1,7 @@
-export const toPercentage = (n: number) => Math.round(100 * n).toString() + '%';
+export const toPercentage = (n: number) => (100 * n).toString() + '%';
+
+export const formatPercentage = (n: number) =>
+  Math.round(100 * n).toString() + '%';
 
 export const formatTime = (timestamp: number) => {
   const date = new Date(timestamp);
