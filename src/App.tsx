@@ -23,9 +23,8 @@ function App() {
     );
   }
 
-  const currentLoad = loadAverageData.data.at(
-    loadAverageData.data.length - 1,
-  ).value;
+  const currentLoad =
+    loadAverageData.data.at(loadAverageData.data.length - 1)?.value || 0;
 
   return (
     <AppContainer>

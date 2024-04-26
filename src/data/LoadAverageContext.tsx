@@ -1,16 +1,16 @@
 import React from 'react';
 import { getLoadAverage, abortLoadAverage } from './loadAverageService';
 import { config } from '../config';
-import { TimeWindowList } from '../lib/timeWindowList';
+import { TimeData, moveTimeWindow } from '../lib/timeWindowList';
 
 interface LoadAverageData {
   error: string | null;
-  data: TimeWindowList;
+  data: TimeData[];
 }
 
 const initialValue = {
   error: null,
-  data: new TimeWindowList(config.cpuLoadTimeWindowInMinutes),
+  data: [],
 };
 
 const LoadAverageContext = React.createContext<LoadAverageData>(initialValue);
@@ -26,11 +26,9 @@ export default function LoadAverageProvider({
   React.useEffect(() => {
     loadAverageInterval(setLoadAverage);
     intervalRef = setInterval(async () => {
-      console.log('interval call');
       loadAverageInterval(setLoadAverage);
-    }, config.cpuLoadRefreshInterval);
+    }, config.cpuLoadRefreshIntervalInSeconds * 1000);
     return () => {
-      console.log('aborting effect');
       abortLoadAverage();
       clearInterval(intervalRef);
     };
@@ -47,12 +45,13 @@ async function loadAverageInterval(
   setLoadAverage: React.Dispatch<React.SetStateAction<LoadAverageData>>,
 ) {
   try {
-    console.log('getLoadAverage');
     const { result } = await getLoadAverage();
-    console.log('GOT loadAverage', result);
     setLoadAverage((prevState) => ({
       error: null,
-      data: prevState.data.add(new Date().getTime(), result),
+      data: moveTimeWindow(
+        [...prevState.data, { timestamp: new Date().getTime(), value: result }],
+        config.cpuLoadTimeWindowInMinutes,
+      ),
     }));
   } catch (error: any) {
     if (error.name !== 'AbortError') {
