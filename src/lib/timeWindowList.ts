@@ -4,12 +4,12 @@ export interface TimeData<T> {
 }
 
 export class TimeWindowList<T> {
-  private window: TimeData<T>[];
-  private readonly maxInterval: number;
+  private window: TimeData<T>[] = [];
+  private windowMap = new Map<number, TimeData<T>>();
+  private readonly timeWindow: number;
 
-  constructor(maxIntervalMinutes: number) {
-    this.window = [];
-    this.maxInterval = maxIntervalMinutes * 60 * 1000;
+  constructor(timeWindowMinutes: number) {
+    this.timeWindow = timeWindowMinutes * 60 * 1000;
   }
 
   get length(): number {
@@ -17,12 +17,16 @@ export class TimeWindowList<T> {
   }
 
   add(timestamp: number, value: T): TimeWindowList<T> {
-    this.window.push({ timestamp, value });
-    while (
-      this.window.length > 0 &&
-      timestamp - this.window[0].timestamp > this.maxInterval
-    ) {
-      this.window.shift();
+    if (!this.windowMap.has(timestamp)) {
+      const data = { timestamp, value };
+      this.window.push(data);
+      this.windowMap.set(timestamp, data);
+      while (
+        this.window.length > 0 &&
+        timestamp - this.window[0].timestamp > this.timeWindow
+      ) {
+        this.windowMap.delete(this.window.shift()?.timestamp!);
+      }
     }
     return this;
   }
