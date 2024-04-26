@@ -1,5 +1,5 @@
 import { TimeData } from '../lib/timeWindowList';
-import { toPercentage, formatTime } from '../lib/utils';
+import { toPercentage } from '../lib/utils';
 
 interface Props {
   loadOverTime: TimeData[];

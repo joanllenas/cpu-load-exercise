@@ -15,7 +15,7 @@ function App() {
     );
   }
 
-  if (loadAverageData.data.length === 0) {
+  if (loadAverageData.loadOverTime.length === 0) {
     return (
       <AppContainer>
         <Alert>Loading...</Alert>
@@ -24,12 +24,13 @@ function App() {
   }
 
   const currentLoad =
-    loadAverageData.data.at(loadAverageData.data.length - 1)?.value || 0;
+    loadAverageData.loadOverTime.at(loadAverageData.loadOverTime.length - 1)
+      ?.value || 0;
 
   return (
     <AppContainer>
       <CurrentLoadWidget currentLoad={currentLoad} />
-      <WindowLoadWidget loadOverTime={loadAverageData.data} />
+      <WindowLoadWidget loadOverTime={loadAverageData.loadOverTime} />
     </AppContainer>
   );
 }

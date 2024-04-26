@@ -5,12 +5,12 @@ import { TimeData, moveTimeWindow } from '../lib/timeWindowList';
 
 interface LoadAverageData {
   error: string | null;
-  data: TimeData[];
+  loadOverTime: TimeData[];
 }
 
 const initialValue: LoadAverageData = {
   error: null,
-  data: [],
+  loadOverTime: [],
 };
 
 const LoadAverageContext = React.createContext<LoadAverageData>(initialValue);
@@ -48,8 +48,11 @@ async function loadAverageInterval(
     const { result } = await getLoadAverage();
     setLoadAverage((prevState) => ({
       error: null,
-      data: moveTimeWindow(
-        [...prevState.data, { timestamp: new Date().getTime(), value: result }],
+      loadOverTime: moveTimeWindow(
+        [
+          ...prevState.loadOverTime,
+          { timestamp: new Date().getTime(), value: result },
+        ],
         config.cpuLoadTimeWindowInMinutes,
       ),
     }));
