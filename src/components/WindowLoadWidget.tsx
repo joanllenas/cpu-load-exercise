@@ -103,7 +103,8 @@ export default function WindowLoadWidget({ loadOverTime }: Props) {
         )}
       </div>
 
-      {/* <div
+      {/* TODO: max / min ranges
+      <div
         className="absolute w-full h-px bg-green-500"
         style={{ bottom: toPercentage(loadOverTime.valueRange.min) }}></div>
       <div

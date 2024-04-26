@@ -3,14 +3,38 @@ import { getLoadAverage, abortLoadAverage } from './loadAverageService';
 import { config } from '../config';
 import { TimeData, moveTimeWindow } from '../lib/timeWindowList';
 
+export interface HighLoadEvent {
+  initialTimestamp: number;
+  finalTimestamp: number | 'ongoing';
+  minValue: number;
+  maxValue: number;
+}
+
 interface LoadAverageData {
   error: string | null;
   loadOverTime: TimeData[];
+  highLoadEvents: HighLoadEvent[];
 }
+
+const now = new Date();
 
 const initialValue: LoadAverageData = {
   error: null,
   loadOverTime: [],
+  highLoadEvents: [
+    {
+      initialTimestamp: now.getMilliseconds() - 1000 * 60 * 2,
+      finalTimestamp: 'ongoing',
+      minValue: 0.55,
+      maxValue: 0.73,
+    },
+    {
+      initialTimestamp: now.getMilliseconds() - 1000 * 60 * 5,
+      finalTimestamp: now.getMilliseconds() - 1000 * 60 * 4,
+      minValue: 0.53,
+      maxValue: 0.89,
+    },
+  ],
 };
 
 const LoadAverageContext = React.createContext<LoadAverageData>(initialValue);
@@ -47,6 +71,7 @@ async function loadAverageInterval(
   try {
     const { result } = await getLoadAverage();
     setLoadAverage((prevState) => ({
+      ...prevState,
       error: null,
       loadOverTime: moveTimeWindow(
         [
