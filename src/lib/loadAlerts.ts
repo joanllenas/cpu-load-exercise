@@ -96,6 +96,8 @@ const recoveredAlert = (startedAt: number): LoadAlert => ({
   type: 'recovered',
   startedAt,
 });
+
+// Keeps track of how long we've been on a given threshold (high or low)
 const accumulate = (
   startedAt: number,
   value: number,
