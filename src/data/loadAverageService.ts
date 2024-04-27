@@ -12,5 +12,4 @@ export function abortLoadAverage() {
 export async function getLoadAverage(): Promise<{ result: number }> {
   const response = await fetch(`${config.apiUrl}/load-average`, { signal });
   return response.json();
-  //return Promise.resolve({ result: Math.random() });
 }
