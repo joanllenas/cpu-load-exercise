@@ -1,12 +1,12 @@
-import { useLoadAverage } from './data/LoadAverageContext';
+import { useLoadAverageData } from './data/LoadAverageContext';
 import CurrentLoadWidget from './components/CurrentLoadWidget';
 import WindowLoadWidget from './components/WindowLoadWidget';
 import AppContainer from './ui/AppContainer';
 import Alert from './ui/Alert';
-import HighLoadEventsWidget from './components/HighLoadEventsWidget';
+import HighLoadAlertsWidget from './components/HighLoadAlertsWidget';
 
 function App() {
-  const loadAverageData = useLoadAverage();
+  const loadAverageData = useLoadAverageData();
 
   if (loadAverageData.error !== null) {
     return (
@@ -32,7 +32,7 @@ function App() {
     <AppContainer>
       <CurrentLoadWidget currentLoad={currentLoad} />
       <WindowLoadWidget loadOverTime={loadAverageData.loadOverTime} />
-      <HighLoadEventsWidget loadEvents={loadAverageData.loadEvents} />
+      <HighLoadAlertsWidget loadAlerts={loadAverageData.loadAlertState.list} />
     </AppContainer>
   );
 }

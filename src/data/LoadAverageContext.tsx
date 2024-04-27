@@ -2,61 +2,22 @@ import React from 'react';
 import { getLoadAverage, abortLoadAverage } from './loadAverageService';
 import { config } from '../config';
 import { TimeData, moveTimeWindow } from '../lib/timeWindowList';
-
-export type LoadEvent =
-  | CompletedHighLoadEvent
-  | OngoingHighLoadEvent
-  | OngoingRestorationEvent
-  | NormalLoadLevelRestored;
-
-export interface CompletedHighLoadEvent {
-  type: 'completedHighLoad';
-  timestamp: number;
-  finalTimestamp: number;
-}
-
-export interface OngoingHighLoadEvent {
-  type: 'ongoingHighLoad';
-  timestamp: number;
-}
-
-export interface OngoingRestorationEvent {
-  type: 'ongoingRestoration';
-  timestamp: number;
-}
-
-export interface NormalLoadLevelRestored {
-  type: 'restoredHighLoad';
-  timestamp: number;
-}
+import {
+  initLoadAlertState,
+  LoadAlertState,
+  processLoadAlerts,
+} from '../lib/loadAlerts';
 
 interface LoadAverageData {
   error: string | null;
   loadOverTime: TimeData[];
-  loadEvents: LoadEvent[];
+  loadAlertState: LoadAlertState;
 }
-
-const now = new Date();
-const minute = 1000 * 60;
 
 const initialValue: LoadAverageData = {
   error: null,
   loadOverTime: [],
-  loadEvents: [
-    {
-      type: 'ongoingHighLoad',
-      timestamp: now.getMilliseconds() - minute * 1,
-    },
-    {
-      type: 'restoredHighLoad',
-      timestamp: now.getMilliseconds() - minute * 4,
-    },
-    {
-      type: 'completedHighLoad',
-      timestamp: now.getMilliseconds() - minute * 5,
-      finalTimestamp: now.getMilliseconds() - minute * 4,
-    },
-  ],
+  loadAlertState: initLoadAlertState(),
 };
 
 const LoadAverageContext = React.createContext<LoadAverageData>(initialValue);
@@ -66,13 +27,13 @@ let intervalRef: ReturnType<typeof setInterval>;
 export default function LoadAverageProvider({
   children,
 }: React.PropsWithChildren) {
-  const [loadAverage, setLoadAverage] =
+  const [loadAverageData, setLoadAverageData] =
     React.useState<LoadAverageData>(initialValue);
 
   React.useEffect(() => {
-    loadAverageInterval(setLoadAverage);
+    loadAverageInterval(setLoadAverageData);
     intervalRef = setInterval(async () => {
-      loadAverageInterval(setLoadAverage);
+      loadAverageInterval(setLoadAverageData);
     }, config.cpuLoadRefreshIntervalInSeconds * 1000);
     return () => {
       abortLoadAverage();
@@ -81,7 +42,7 @@ export default function LoadAverageProvider({
   }, []);
 
   return (
-    <LoadAverageContext.Provider value={loadAverage}>
+    <LoadAverageContext.Provider value={loadAverageData}>
       {children}
     </LoadAverageContext.Provider>
   );
@@ -90,18 +51,20 @@ export default function LoadAverageProvider({
 async function loadAverageInterval(
   setLoadAverage: React.Dispatch<React.SetStateAction<LoadAverageData>>,
 ) {
+  const timestamp = new Date().getTime();
   try {
     const { result } = await getLoadAverage();
+
     setLoadAverage((prevState) => ({
-      ...prevState,
       error: null,
       loadOverTime: moveTimeWindow(
-        [
-          ...prevState.loadOverTime,
-          { timestamp: new Date().getTime(), value: result },
-        ],
+        [...prevState.loadOverTime, { timestamp, value: result }],
         config.cpuLoadTimeWindowInMinutes,
       ),
+      loadAlertState: processLoadAlerts(prevState.loadAlertState, {
+        timestamp,
+        value: result,
+      }),
     }));
   } catch (error: any) {
     if (error.name !== 'AbortError') {
@@ -114,6 +77,6 @@ async function loadAverageInterval(
   }
 }
 
-export function useLoadAverage() {
+export function useLoadAverageData() {
   return React.useContext(LoadAverageContext);
 }

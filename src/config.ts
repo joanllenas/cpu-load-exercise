@@ -5,5 +5,5 @@ export const config = {
   // high/restored load thresholds
   cpuHighLoadThresholdValue: 1,
   cpuHighLoadTimeThresholdInMinutes: 2,
-  cpuRecoveredTimeThresholdInMinutes: 2,
+  cpuRecoveryTimeThresholdInMinutes: 2,
 };

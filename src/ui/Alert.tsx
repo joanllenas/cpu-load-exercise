@@ -18,7 +18,7 @@ export default function Alert({
   return (
     <div
       className={classNames(
-        'px-9 py-6 shadow-xl shadow-slate-800 rounded-2xl',
+        'px-9 py-6 shadow-xl shadow-slate-800 rounded-2xl flex items-center gap-1',
         variantClasses,
       )}>
       {children}
