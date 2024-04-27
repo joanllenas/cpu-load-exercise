@@ -45,7 +45,7 @@ export const processLoadAlerts = (
   // Attempt to add a new High alert or accumulate for it
   if (isHigh(state.accumulator.value) && isHigh(data.value)) {
     const duration = data.timestamp - state.accumulator.startedAt;
-    // We only add a new alert after recovery
+    // We only add a new alert at the beginning or after recovery
     if (
       hasReachedLoadTimeThreshold(duration) &&
       !previousIsHighAlert(state.list)
@@ -63,7 +63,7 @@ export const processLoadAlerts = (
   }
 
   // Attempt to add a new Recovery alert or accumulate for it
-  // We only add a new alert after a high load alert
+  // We only add a new recovery alert after a high load alert
   if (
     previousIsHighAlert(state.list) &&
     !isHigh(state.accumulator.value) &&
