@@ -31,6 +31,7 @@ interface LoadAverageData {
 }
 
 const now = new Date();
+const minute = 1000 * 60;
 
 const initialValue: LoadAverageData = {
   error: null,
@@ -38,16 +39,16 @@ const initialValue: LoadAverageData = {
   loadEvents: [
     {
       type: 'ongoing',
-      timestamp: now.getMilliseconds() - 1003 * 60 * 2,
+      timestamp: now.getMilliseconds() - minute * 1,
     },
     {
       type: 'restored',
-      timestamp: now.getMilliseconds() - 1007 * 60 * 4,
+      timestamp: now.getMilliseconds() - minute * 4,
     },
     {
       type: 'completed',
-      timestamp: now.getMilliseconds() - 1006 * 60 * 5,
-      finalTimestamp: now.getMilliseconds() - 1001 * 60 * 4,
+      timestamp: now.getMilliseconds() - minute * 5,
+      finalTimestamp: now.getMilliseconds() - minute * 4,
     },
   ],
 };
