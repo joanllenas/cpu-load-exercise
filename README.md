@@ -25,7 +25,7 @@ The explanation of how I would extend or improve the application design if I wer
 
 ## Video demo
 
-[Video](./_demo/load-average.mov)
+View the [video](./_demo/load-average.mov) located in `./_demo/load-average.mov`.
 
 ## Screenshot
 
