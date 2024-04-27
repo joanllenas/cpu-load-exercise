@@ -18,7 +18,9 @@ export default function HighLoadEventsWidget({ loadEvents }: Props) {
       <ul>
         {filterMap(
           loadEvents,
-          (loadEvent) => loadEvent.type !== 'ongoing',
+          (loadEvent) =>
+            loadEvent.type !== 'ongoingHighLoad' &&
+            loadEvent.type !== 'ongoingRestoration',
           (loadEvent) => (
             <li key={loadEvent.timestamp} className="group">
               <div className="pb-8">
@@ -39,7 +41,7 @@ export default function HighLoadEventsWidget({ loadEvents }: Props) {
 function EventIcon({ event }: { event: LoadEvent }) {
   let Icon = ExclamationTriangleIcon;
   let bgColor = 'bg-red-500';
-  if (event.type === 'restored') {
+  if (event.type === 'restoredHighLoad') {
     Icon = CheckIcon;
     bgColor = 'bg-green-500';
   }
@@ -59,9 +61,9 @@ function EventContent({ event }: { event: LoadEvent }) {
     <div className="flex min-w-0 flex-1 justify-between space-x-4 pt-1.5">
       <div>
         <p className="text-sm text-slate-400">
-          {event.type === 'restored' ? (
+          {event.type === 'restoredHighLoad' ? (
             <span>Normal load levels were restored</span>
-          ) : event.type === 'completed' ? (
+          ) : event.type === 'completedHighLoad' ? (
             <span>
               High load event lasted for{' '}
               <span className="text-slate-300">

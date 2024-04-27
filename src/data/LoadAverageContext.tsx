@@ -6,21 +6,27 @@ import { TimeData, moveTimeWindow } from '../lib/timeWindowList';
 export type LoadEvent =
   | CompletedHighLoadEvent
   | OngoingHighLoadEvent
+  | OngoingRestorationEvent
   | NormalLoadLevelRestored;
 
 export interface CompletedHighLoadEvent {
-  type: 'completed';
+  type: 'completedHighLoad';
   timestamp: number;
   finalTimestamp: number;
 }
 
 export interface OngoingHighLoadEvent {
-  type: 'ongoing';
+  type: 'ongoingHighLoad';
+  timestamp: number;
+}
+
+export interface OngoingRestorationEvent {
+  type: 'ongoingRestoration';
   timestamp: number;
 }
 
 export interface NormalLoadLevelRestored {
-  type: 'restored';
+  type: 'restoredHighLoad';
   timestamp: number;
 }
 
@@ -38,15 +44,15 @@ const initialValue: LoadAverageData = {
   loadOverTime: [],
   loadEvents: [
     {
-      type: 'ongoing',
+      type: 'ongoingHighLoad',
       timestamp: now.getMilliseconds() - minute * 1,
     },
     {
-      type: 'restored',
+      type: 'restoredHighLoad',
       timestamp: now.getMilliseconds() - minute * 4,
     },
     {
-      type: 'completed',
+      type: 'completedHighLoad',
       timestamp: now.getMilliseconds() - minute * 5,
       finalTimestamp: now.getMilliseconds() - minute * 4,
     },
