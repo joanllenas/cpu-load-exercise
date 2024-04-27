@@ -12,15 +12,11 @@ export interface CompletedHighLoadEvent {
   type: 'completed';
   timestamp: number;
   finalTimestamp: number;
-  minValue: number;
-  maxValue: number;
 }
 
 export interface OngoingHighLoadEvent {
   type: 'ongoing';
   timestamp: number;
-  minValue: number;
-  maxValue: number;
 }
 
 export interface NormalLoadLevelRestored {
@@ -43,8 +39,6 @@ const initialValue: LoadAverageData = {
     {
       type: 'ongoing',
       timestamp: now.getMilliseconds() - 1000 * 60 * 2,
-      minValue: 0.55,
-      maxValue: 0.73,
     },
     {
       type: 'restored',
@@ -54,8 +48,6 @@ const initialValue: LoadAverageData = {
       type: 'completed',
       timestamp: now.getMilliseconds() - 1000 * 60 * 5,
       finalTimestamp: now.getMilliseconds() - 1000 * 60 * 4,
-      minValue: 0.53,
-      maxValue: 0.89,
     },
   ],
 };
