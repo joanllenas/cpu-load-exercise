@@ -35,18 +35,26 @@ export const processLoadAlerts = (
   { list, accumulator }: LoadAlertState,
   { timestamp, value }: TimeData,
 ): LoadAlertState => {
-  // Adding a new High alert
+  // Default accumulator logic
+  let result = { list, accumulator: accumulate(timestamp, value) };
+
+  // Attempt to add a new High alert or accumulate for it
   if (isHigh(accumulator.value) && isHigh(value)) {
     const duration = timestamp - accumulator.startedAt;
     if (hasReachedHighLoadTimeThreshold(duration)) {
-      return {
+      result = {
         list: [...list, high(accumulator.startedAt)],
         accumulator: accumulate(timestamp, value),
+      };
+    } else {
+      result = {
+        list,
+        accumulator: accumulate(accumulator.startedAt, value),
       };
     }
   }
 
-  // Adding a new Recovered alert
+  // Attempt to add a new Recovery alert or accumulate for it
   if (
     previousIsHighAlert(list) &&
     !isHigh(accumulator.value) &&
@@ -54,13 +62,20 @@ export const processLoadAlerts = (
   ) {
     const duration = timestamp - accumulator.startedAt;
     if (hasReachedRecoveryTimeThreshold(duration)) {
-      return {
+      result = {
         list: [...list, recovered(accumulator.startedAt)],
         accumulator: accumulate(timestamp, value),
       };
+    } else {
+      result = {
+        list,
+        accumulator: accumulate(accumulator.startedAt, value),
+      };
     }
   }
-  return { list, accumulator: accumulate(timestamp, value) };
+
+  console.log(result.accumulator);
+  return result;
 };
 
 // Type constructors
