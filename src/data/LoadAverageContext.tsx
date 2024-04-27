@@ -7,6 +7,7 @@ import {
   LoadAlertState,
   processLoadAlerts,
 } from '../lib/loadAlerts';
+import { sToMs } from '../lib/utils';
 
 interface LoadAverageData {
   error: string | null;
@@ -34,7 +35,7 @@ export default function LoadAverageProvider({
     loadAverageInterval(setLoadAverageData);
     intervalRef = setInterval(async () => {
       loadAverageInterval(setLoadAverageData);
-    }, config.cpuLoadRefreshIntervalInSeconds * 1000);
+    }, sToMs(config.cpuLoadRefreshIntervalInSeconds));
     return () => {
       abortLoadAverage();
       clearInterval(intervalRef);

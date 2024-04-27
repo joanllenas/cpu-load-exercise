@@ -27,6 +27,6 @@ describe('moveTimeWindow', () => {
       { timestamp: tenMinutes, value: 1 },
       { timestamp: tenMinutes + 1000, value: 2 },
     ];
-    expect(moveTimeWindow(list, 10).at(0)?.value).toBe(1);
+    expect(moveTimeWindow(list, 10)[0].value).toBe(1);
   });
 });

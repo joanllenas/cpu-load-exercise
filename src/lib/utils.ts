@@ -15,16 +15,11 @@ export const formatTime = (timestamp: number): string => {
 };
 
 /**
- * Formats timestamp difference as either `1h 2m 5s` or `9m 3s` (when less than an hour)
+ * Convert minutes to milliseconds
  */
-export const formatDuration = (
-  fromTimestamp: number,
-  toTimestamp: number,
-): string => {
-  const duration = toTimestamp - fromTimestamp;
-  const s = Math.floor((duration / 1000) % 60);
-  const m = Math.floor((duration / (1000 * 60)) % 60);
-  const h = Math.floor((duration / (1000 * 60 * 60)) % 24);
+export const minToMs = (mins: number) => mins * 60 * 1000;
 
-  return h > 0 ? `${h}h ${m}m ${s}s` : `${m}m ${s}s`;
-};
+/**
+ * Convert seconds to milliseconds
+ */
+export const sToMs = (s: number) => s * 1000;

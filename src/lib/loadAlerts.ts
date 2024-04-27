@@ -1,6 +1,6 @@
 import { config } from '../config';
 import { TimeData } from './timeWindowList';
-import { formatDuration } from './utils';
+import { minToMs } from './utils';
 
 // Types
 
@@ -33,28 +33,31 @@ export const initLoadAlertState = (): LoadAlertState => ({
 // -------------
 
 export const processLoadAlerts = (
-  { list, accumulator }: LoadAlertState,
-  { timestamp, value }: TimeData,
+  state: LoadAlertState,
+  data: TimeData,
 ): LoadAlertState => {
   // Default accumulator logic
-  let result = { list, accumulator: accumulate(timestamp, value) };
+  let result = {
+    list: state.list,
+    accumulator: accumulate(data.timestamp, data.value),
+  };
 
   // Attempt to add a new High alert or accumulate for it
-  if (isHigh(accumulator.value) && isHigh(value)) {
-    const duration = timestamp - accumulator.startedAt;
+  if (isHigh(state.accumulator.value) && isHigh(data.value)) {
+    const duration = data.timestamp - state.accumulator.startedAt;
     // We only add a new alert after recovery
     if (
-      hasReachedHighLoadTimeThreshold(duration) &&
-      !previousIsHighAlert(list)
+      hasReachedLoadTimeThreshold(duration) &&
+      !previousIsHighAlert(state.list)
     ) {
       result = {
-        list: [highAlert(accumulator.startedAt), ...list],
-        accumulator: accumulate(timestamp, value),
+        list: [highAlert(state.accumulator.startedAt), ...state.list],
+        accumulator: accumulate(data.timestamp, data.value),
       };
     } else {
       result = {
-        list,
-        accumulator: accumulate(accumulator.startedAt, value),
+        list: state.list,
+        accumulator: accumulate(state.accumulator.startedAt, data.value),
       };
     }
   }
@@ -62,27 +65,23 @@ export const processLoadAlerts = (
   // Attempt to add a new Recovery alert or accumulate for it
   // We only add a new alert after a high load alert
   if (
-    previousIsHighAlert(list) &&
-    !isHigh(accumulator.value) &&
-    !isHigh(value)
+    previousIsHighAlert(state.list) &&
+    !isHigh(state.accumulator.value) &&
+    !isHigh(data.value)
   ) {
-    const duration = timestamp - accumulator.startedAt;
-    if (hasReachedRecoveryTimeThreshold(duration)) {
+    const duration = data.timestamp - state.accumulator.startedAt;
+    if (hasReachedLoadTimeThreshold(duration)) {
       result = {
-        list: [recoveredAlert(accumulator.startedAt), ...list],
-        accumulator: accumulate(timestamp, value),
+        list: [recoveredAlert(state.accumulator.startedAt), ...state.list],
+        accumulator: accumulate(data.timestamp, data.value),
       };
     } else {
       result = {
-        list,
-        accumulator: accumulate(accumulator.startedAt, value),
+        list: state.list,
+        accumulator: accumulate(state.accumulator.startedAt, data.value),
       };
     }
   }
-
-  console.log(
-    formatDuration(result.accumulator.startedAt, new Date().getTime()),
-  );
 
   return result;
 };
@@ -112,10 +111,6 @@ function previousIsHighAlert(list: LoadAlert[]): boolean {
   return list.length > 0 && list[0].type === 'high';
 }
 
-function hasReachedHighLoadTimeThreshold(value: number) {
-  return value >= config.cpuHighLoadTimeThresholdInMinutes * 60 * 1000;
-}
-
-function hasReachedRecoveryTimeThreshold(value: number) {
-  return value >= config.cpuRecoveryTimeThresholdInMinutes * 60 * 1000;
+function hasReachedLoadTimeThreshold(value: number) {
+  return value >= minToMs(config.cpuLoadTimeThresholdInMinutes);
 }
