@@ -1,5 +1,6 @@
 import { config } from '../config';
 import { TimeData } from './timeWindowList';
+import { formatDuration } from './utils';
 
 // Types
 
@@ -41,9 +42,13 @@ export const processLoadAlerts = (
   // Attempt to add a new High alert or accumulate for it
   if (isHigh(accumulator.value) && isHigh(value)) {
     const duration = timestamp - accumulator.startedAt;
-    if (hasReachedHighLoadTimeThreshold(duration)) {
+    // We only add a new alert after recovery
+    if (
+      hasReachedHighLoadTimeThreshold(duration) &&
+      !previousIsHighAlert(list)
+    ) {
       result = {
-        list: [...list, high(accumulator.startedAt)],
+        list: [...list, highAlert(accumulator.startedAt)],
         accumulator: accumulate(timestamp, value),
       };
     } else {
@@ -55,6 +60,7 @@ export const processLoadAlerts = (
   }
 
   // Attempt to add a new Recovery alert or accumulate for it
+  // We only add a new alert after a high load alert
   if (
     previousIsHighAlert(list) &&
     !isHigh(accumulator.value) &&
@@ -63,7 +69,7 @@ export const processLoadAlerts = (
     const duration = timestamp - accumulator.startedAt;
     if (hasReachedRecoveryTimeThreshold(duration)) {
       result = {
-        list: [...list, recovered(accumulator.startedAt)],
+        list: [...list, recoveredAlert(accumulator.startedAt)],
         accumulator: accumulate(timestamp, value),
       };
     } else {
@@ -74,14 +80,20 @@ export const processLoadAlerts = (
     }
   }
 
-  console.log(result.accumulator);
+  console.log(
+    formatDuration(result.accumulator.startedAt, new Date().getTime()),
+  );
+
   return result;
 };
 
 // Type constructors
 
-const high = (startedAt: number): LoadAlert => ({ type: 'high', startedAt });
-const recovered = (startedAt: number): LoadAlert => ({
+const highAlert = (startedAt: number): LoadAlert => ({
+  type: 'high',
+  startedAt,
+});
+const recoveredAlert = (startedAt: number): LoadAlert => ({
   type: 'recovered',
   startedAt,
 });
@@ -96,7 +108,7 @@ function isHigh(value: number) {
   return value >= config.cpuHighLoadThresholdValue;
 }
 
-function previousIsHighAlert(list: LoadAlert[]) {
+function previousIsHighAlert(list: LoadAlert[]): boolean {
   return list.length > 0 && list[list.length - 1].type === 'high';
 }
 
