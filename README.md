@@ -23,7 +23,13 @@ npm run test
 
 The explanation of how I would extend or improve the application design if I were building this for production [can be found here](./PRODUCTION.md).
 
----
+## Video demo
+
+[Video](./_demo/load-average.mov)
+
+## Screenshot
+
+![Screenshot](./_demo/screenshot.png)
 
 ---
 
