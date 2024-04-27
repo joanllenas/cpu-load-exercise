@@ -48,7 +48,7 @@ export const processLoadAlerts = (
       !previousIsHighAlert(list)
     ) {
       result = {
-        list: [...list, highAlert(accumulator.startedAt)],
+        list: [highAlert(accumulator.startedAt), ...list],
         accumulator: accumulate(timestamp, value),
       };
     } else {
@@ -69,7 +69,7 @@ export const processLoadAlerts = (
     const duration = timestamp - accumulator.startedAt;
     if (hasReachedRecoveryTimeThreshold(duration)) {
       result = {
-        list: [...list, recoveredAlert(accumulator.startedAt)],
+        list: [recoveredAlert(accumulator.startedAt), ...list],
         accumulator: accumulate(timestamp, value),
       };
     } else {
@@ -109,7 +109,7 @@ function isHigh(value: number) {
 }
 
 function previousIsHighAlert(list: LoadAlert[]): boolean {
-  return list.length > 0 && list[list.length - 1].type === 'high';
+  return list.length > 0 && list[0].type === 'high';
 }
 
 function hasReachedHighLoadTimeThreshold(value: number) {
