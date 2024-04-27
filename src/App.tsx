@@ -32,7 +32,7 @@ function App() {
     <AppContainer>
       <CurrentLoadWidget currentLoad={currentLoad} />
       <WindowLoadWidget loadOverTime={loadAverageData.loadOverTime} />
-      <HighLoadEventsWidget highLoadEvents={loadAverageData.highLoadEvents} />
+      <HighLoadEventsWidget loadEvents={loadAverageData.loadEvents} />
     </AppContainer>
   );
 }

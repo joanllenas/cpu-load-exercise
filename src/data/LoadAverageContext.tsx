@@ -3,17 +3,35 @@ import { getLoadAverage, abortLoadAverage } from './loadAverageService';
 import { config } from '../config';
 import { TimeData, moveTimeWindow } from '../lib/timeWindowList';
 
-export interface HighLoadEvent {
-  initialTimestamp: number;
-  finalTimestamp: number | 'ongoing';
+export type LoadEvent =
+  | CompletedHighLoadEvent
+  | OngoingHighLoadEvent
+  | NormalLoadLevelRestored;
+
+export interface CompletedHighLoadEvent {
+  type: 'completed';
+  timestamp: number;
+  finalTimestamp: number;
   minValue: number;
   maxValue: number;
+}
+
+export interface OngoingHighLoadEvent {
+  type: 'ongoing';
+  timestamp: number;
+  minValue: number;
+  maxValue: number;
+}
+
+export interface NormalLoadLevelRestored {
+  type: 'restored';
+  timestamp: number;
 }
 
 interface LoadAverageData {
   error: string | null;
   loadOverTime: TimeData[];
-  highLoadEvents: HighLoadEvent[];
+  loadEvents: LoadEvent[];
 }
 
 const now = new Date();
@@ -21,15 +39,20 @@ const now = new Date();
 const initialValue: LoadAverageData = {
   error: null,
   loadOverTime: [],
-  highLoadEvents: [
+  loadEvents: [
     {
-      initialTimestamp: now.getMilliseconds() - 1000 * 60 * 2,
-      finalTimestamp: 'ongoing',
+      type: 'ongoing',
+      timestamp: now.getMilliseconds() - 1000 * 60 * 2,
       minValue: 0.55,
       maxValue: 0.73,
     },
     {
-      initialTimestamp: now.getMilliseconds() - 1000 * 60 * 5,
+      type: 'restored',
+      timestamp: now.getMilliseconds() - 1000 * 60 * 4,
+    },
+    {
+      type: 'completed',
+      timestamp: now.getMilliseconds() - 1000 * 60 * 5,
       finalTimestamp: now.getMilliseconds() - 1000 * 60 * 4,
       minValue: 0.53,
       maxValue: 0.89,
