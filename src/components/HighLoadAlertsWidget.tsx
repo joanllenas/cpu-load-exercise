@@ -1,6 +1,6 @@
 import { classNames } from '../lib/classNames';
 import { LoadAlert } from '../lib/loadAlerts';
-import { filterMap, formatTime } from '../lib/utils';
+import { formatTime } from '../lib/utils';
 import Alert from '../ui/Alert';
 import {
   CheckIcon,
