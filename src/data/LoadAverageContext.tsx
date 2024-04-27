@@ -38,16 +38,16 @@ const initialValue: LoadAverageData = {
   loadEvents: [
     {
       type: 'ongoing',
-      timestamp: now.getMilliseconds() - 1000 * 60 * 2,
+      timestamp: now.getMilliseconds() - 1003 * 60 * 2,
     },
     {
       type: 'restored',
-      timestamp: now.getMilliseconds() - 1000 * 60 * 4,
+      timestamp: now.getMilliseconds() - 1007 * 60 * 4,
     },
     {
       type: 'completed',
-      timestamp: now.getMilliseconds() - 1000 * 60 * 5,
-      finalTimestamp: now.getMilliseconds() - 1000 * 60 * 4,
+      timestamp: now.getMilliseconds() - 1006 * 60 * 5,
+      finalTimestamp: now.getMilliseconds() - 1001 * 60 * 4,
     },
   ],
 };

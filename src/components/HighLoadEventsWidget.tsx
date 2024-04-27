@@ -1,6 +1,6 @@
 import { LoadEvent } from '../data/LoadAverageContext';
 import { classNames } from '../lib/classNames';
-import { formatTime } from '../lib/utils';
+import { formatDuration, formatTime } from '../lib/utils';
 import Alert from '../ui/Alert';
 import {
   CheckIcon,
@@ -58,16 +58,27 @@ function EventIcon({ event }: { event: LoadEvent }) {
 }
 
 function EventContent({ event }: { event: LoadEvent }) {
+  const now = new Date().getMilliseconds();
   return (
     <div className="flex min-w-0 flex-1 justify-between space-x-4 pt-1.5">
       <div>
         <p className="text-sm text-slate-400">
           {event.type === 'ongoing' ? (
-            <span>Ongoing</span>
+            <span>
+              High load event ongoing for:{' '}
+              <span className="text-slate-300">
+                {formatDuration(event.timestamp, now)}
+              </span>
+            </span>
           ) : event.type === 'restored' ? (
-            <span>Restored at: {formatTime(event.timestamp)}</span>
+            <span>Normal load levels were restored</span>
           ) : event.type === 'completed' ? (
-            <span>End time: {formatTime(event.finalTimestamp)}</span>
+            <span>
+              High load event lasted for{' '}
+              <span className="text-slate-300">
+                {formatDuration(event.timestamp, event.finalTimestamp)}
+              </span>
+            </span>
           ) : null}
         </p>
       </div>
