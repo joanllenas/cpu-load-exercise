@@ -1,3 +1,9 @@
+/**
+Data structure: `Sliding window`.
+Time: O(n).
+Space: O(n).
+ */
+
 import { minToMs } from './utils';
 
 export interface TimeData {
@@ -9,12 +15,13 @@ export const moveTimeWindow = (
   list: TimeData[],
   timeWindowMinutes: number,
 ): TimeData[] => {
-  let first = list[0].timestamp;
-  let last = list[list.length - 1].timestamp;
   const timeWindow = minToMs(timeWindowMinutes);
-  while (list.length > 0 && last - first > timeWindow) {
-    list.shift();
-    first = list[0].timestamp;
+  let start = 0;
+  const end = list.length - 1;
+  const last = list[end].timestamp;
+  // Advance the start index until the window is within the allowed time span
+  while (start <= end && last - list[start].timestamp > timeWindow) {
+    start++;
   }
-  return list;
+  return list.slice(start, end + 1);
 };

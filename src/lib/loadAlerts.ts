@@ -1,3 +1,21 @@
+/**
+Data structure: `LoadAlertState` (custom-made).
+Time: O(1).
+Space: O(n).
+
+The `LoadAlertState` data structure has two responsibilities. On the one hand, it maintains a list 
+of the generated alerts (`LoadAlertState['list']`), and on the other, it tracks the latest time 
+window in which a high or low value has been reached continuously (`LoadAlertState['accumulator']`). 
+This tracking enables the calculation of when to generate a new alert.
+
+The main entry point to the data structure logic is the `processLoadAlerts()` function, which takes 
+the current state (`LoadAlertState`) and the new load average data point (`TimeData`).
+
+Each time `processLoadAlerts()` is called with a new data point, a series of calculations are performed 
+by comparing it with the latest generated alert data, enabling us to determine when to generate a new 
+alert as specified.
+ */
+
 import { config } from '../config';
 import { TimeData } from './timeWindowList';
 import { minToMs } from './utils';
