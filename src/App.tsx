@@ -1,9 +1,9 @@
-import { useLoadAverageData } from './data/LoadAverageContext';
 import CurrentLoadWidget from './components/CurrentLoadWidget';
 import WindowLoadWidget from './components/WindowLoadWidget';
 import AppContainer from './ui/AppContainer';
 import Alert from './ui/Alert';
 import HighLoadAlertsWidget from './components/HighLoadAlertsWidget';
+import { useLoadAverageData } from './data/useLoadAverageData';
 
 function App() {
   const loadAverageData = useLoadAverageData();

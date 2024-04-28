@@ -7,7 +7,7 @@ import {
   LoadAlertState,
   processLoadAlerts,
 } from '../lib/loadAlerts';
-import { sToMs } from '../lib/utils';
+import { minToMs, sToMs } from '../lib/utils';
 
 interface LoadAverageData {
   error: string | null;
@@ -15,13 +15,23 @@ interface LoadAverageData {
   loadAlertState: LoadAlertState;
 }
 
+// Prefill the previous 10 minutes with a value of 0
+const now = new Date().getTime();
+const backwardsTimeWindow = minToMs(config.cpuLoadTimeWindowInMinutes);
+const initialTime = now - backwardsTimeWindow;
+const step = sToMs(config.cpuLoadRefreshIntervalInSeconds);
+const loadOverTime: TimeData[] = [];
+for (let t = now; t >= initialTime; t -= step) {
+  loadOverTime.unshift({ timestamp: t, value: 0 });
+}
 const initialValue: LoadAverageData = {
   error: null,
-  loadOverTime: [],
+  loadOverTime,
   loadAlertState: initLoadAlertState(),
 };
 
-const LoadAverageContext = React.createContext<LoadAverageData>(initialValue);
+export const LoadAverageContext =
+  React.createContext<LoadAverageData>(initialValue);
 
 let intervalRef: ReturnType<typeof setInterval>;
 
@@ -67,7 +77,7 @@ async function loadAverageInterval(
         value: result,
       }),
     }));
-  } catch (error: any) {
+  } catch (error) {
     if (error.name !== 'AbortError') {
       clearInterval(intervalRef);
       setLoadAverage((prevState) => ({
@@ -76,8 +86,4 @@ async function loadAverageInterval(
       }));
     }
   }
-}
-
-export function useLoadAverageData() {
-  return React.useContext(LoadAverageContext);
 }
