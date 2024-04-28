@@ -43,24 +43,24 @@ describe('processLoadAlerts', () => {
   test('there are no alerts initially', () => {
     expect(initLoadAlertState().list.length).toBe(0);
   });
-  test('one alert is created after reaching time treshold 1 time at a value constantly >= than the high CPU threshold', () => {
+  test('one alert is generated after the time threshold is exceeded one time, with values consistently >= to the high CPU threshold.', () => {
     const state = mockAdvanceTime(1, highCPUValueGen);
     expect(state.list.length).toBe(1);
     expect(state.list[0].type).toBe('high');
   });
-  test('only one alert is created after reaching time treshold 5 times over at a value constantly >= than the high CPU threshold', () => {
+  test('only one alert is generated after the time threshold is exceeded five times, with values consistently >= to the high CPU threshold.', () => {
     const state = mockAdvanceTime(5, highCPUValueGen);
     expect(state.list.length).toBe(1);
     expect(state.list[0].type).toBe('high');
   });
-  test('after generating a high load alert, a recovery alert is generated after the recovery threshold time has passed', () => {
+  test('after generating a high load alert, a recovery alert is generated once the recovery threshold time has passed', () => {
     let state = mockAdvanceTime(5, highCPUValueGen);
     state = mockAdvanceTime(1, lowCPUValueGen, state);
     expect(state.list.length).toBe(2);
     expect(state.list[0].type).toBe('recovered');
     expect(state.list[1].type).toBe('high');
   });
-  test('only one recovery alert is generated after reaching the recovery threshold 5 times over', () => {
+  test('only one recovery alert is generated after the recovery threshold is exceeded five times', () => {
     let state = mockAdvanceTime(5, highCPUValueGen);
     state = mockAdvanceTime(5, lowCPUValueGen, state);
     expect(state.list.length).toBe(2);

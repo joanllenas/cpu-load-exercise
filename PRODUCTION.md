@@ -22,6 +22,8 @@ This application is read-only, but if we were to start adding interactivity, I w
 
 If I were building this for production, I would ensure that the UI adapts to the device screen size by responding to media query breakpoints.
 
-## Other code improvements
+## Other
 
-I have left a few `TODO:` comments in the code with things I would have done differently if I were building this for production.
+I've added a few `TODO:` comments in the code with things I would do differently if I were building this for production.
+
+When appropriate, I've also included comments explaining the data structures used or providing clarifications on aspects of the code.
