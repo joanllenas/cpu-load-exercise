@@ -6,7 +6,7 @@ interface Props {
   loadOverTime: TimeData[];
 }
 
-const toAreaClipPath = (points: Props['loadOverTime']) => {
+const calcPolygonClipPath = (points: Props['loadOverTime']) => {
   if (points.length === 0) {
     return '';
   } else if (points.length === 1) {
@@ -21,7 +21,7 @@ const toAreaClipPath = (points: Props['loadOverTime']) => {
   return `polygon(${polygonPointPairs.join(', ')})`;
 };
 
-const toLeft = (index: number, len: number) => {
+const calcBarLeftPosition = (index: number, len: number) => {
   if (len === 1) {
     return toPercentage(0);
   }
@@ -29,7 +29,7 @@ const toLeft = (index: number, len: number) => {
   return toPercentage(index * proportion);
 };
 
-const toWidth = (len: number) => {
+const calcBarWidth = (len: number) => {
   if (len === 1) {
     return toPercentage(0);
   }
@@ -37,11 +37,11 @@ const toWidth = (len: number) => {
   return toPercentage(proportion);
 };
 
-export default function WindowLoadWidget({ loadOverTime }: Props) {
+export default function LoadTimeWindowWidget({ loadOverTime }: Props) {
   const [hoverData, setHoverData] = React.useState(loadOverTime[0]);
   const [tooltipVisible, setTooltipVisible] = React.useState(false);
   const [tooltipPosition, setTooltipPosition] = React.useState({ x: 0, y: 0 });
-  const barWidth = toWidth(loadOverTime.length);
+  const barWidth = calcBarWidth(loadOverTime.length);
 
   function updateTooltipPosition(
     event: React.MouseEvent<HTMLDivElement, MouseEvent>,
@@ -77,7 +77,7 @@ export default function WindowLoadWidget({ loadOverTime }: Props) {
       className="relative flex items-center justify-center w-full shadow-xl shadow-slate-800 h-52 rounded-2xl overflow-clip bg-gradient-to-tr from-slate-600 to-slate-800">
       <div
         className="absolute w-full h-full"
-        style={{ clipPath: toAreaClipPath(loadOverTime) }}>
+        style={{ clipPath: calcPolygonClipPath(loadOverTime) }}>
         <div className="absolute bg-gradient-to-t to-75% from-green-700 to-red-900 w-full h-full"></div>
       </div>
 
@@ -89,7 +89,7 @@ export default function WindowLoadWidget({ loadOverTime }: Props) {
               onMouseEnter={() => setHoverData(data)}
               className="absolute h-full border-l border-dashed first:border-l-0 border-slate-700 hover:bg-slate-400 hover:bg-opacity-15"
               style={{
-                left: toLeft(index, loadOverTime.length),
+                left: calcBarLeftPosition(index, loadOverTime.length),
                 width: barWidth,
               }}></div>
           );

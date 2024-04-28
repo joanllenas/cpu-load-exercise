@@ -1,5 +1,5 @@
 import CurrentLoadWidget from './components/CurrentLoadWidget';
-import WindowLoadWidget from './components/WindowLoadWidget';
+import LoadTimeWindowWidget from './components/LoadTimeWindowWidget';
 import AppContainer from './ui/AppContainer';
 import Alert from './ui/Alert';
 import HighLoadAlertsWidget from './components/HighLoadAlertsWidget';
@@ -31,7 +31,7 @@ function App() {
   return (
     <AppContainer>
       <CurrentLoadWidget currentLoad={currentLoad} />
-      <WindowLoadWidget loadOverTime={loadAverageData.loadOverTime} />
+      <LoadTimeWindowWidget loadOverTime={loadAverageData.loadOverTime} />
       <HighLoadAlertsWidget loadAlerts={loadAverageData.loadAlertState.list} />
     </AppContainer>
   );
