@@ -52,7 +52,7 @@ export default function LoadTimeWindowWidget({ loadOverTime }: Props) {
       y: event.clientY - surface.offsetTop,
     };
 
-    // TODO: In PROD I would probably use useRef() and useLayoutEffect() to get the tooltip size
+    // TODO: I would probably use useRef() and useLayoutEffect() to get the tooltip size
     const tooltipWidth = 120;
     const tooltipHeight = 20;
 
